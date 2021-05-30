@@ -19,27 +19,6 @@ import xyz.sainjiaomao.parallel.task.Constant;
 @SpringBootConfiguration
 public class RedisConfiguration {
 
-//  @Bean
-//  public JdkSerializationRedisSerializer jdkSerializationRedisSerializer(){
-//    return new JdkSerializationRedisSerializer();
-//  }
-//
-//  @Bean
-//  public StringRedisSerializer stringRedisSerializer(){
-//    return new StringRedisSerializer();
-//  }
-
-//  @Bean
-//  public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory,
-//                                                     StringRedisSerializer stringRedisSerializer,
-//                                                     JdkSerializationRedisSerializer jdkSerializationRedisSerializer){
-//    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-//    redisTemplate.setConnectionFactory(redisConnectionFactory);
-//    redisTemplate.setKeySerializer(stringRedisSerializer);
-//    redisTemplate.setValueSerializer(stringRedisSerializer);
-//    return redisTemplate;
-//  }
-
 
   @Bean
   public RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,

@@ -4,15 +4,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.sainjiaomao.parallel.custom.ClearHandler;
+import xyz.sainjiaomao.parallel.custom.CustomHandler;
 import xyz.sainjiaomao.parallel.custom.Context;
-import xyz.sainjiaomao.parallel.custom.PrintHandler;
-import xyz.sainjiaomao.parallel.custom.ReadHandler;
 import xyz.sainjiaomao.parallel.task.Constant;
-import xyz.sainjiaomao.parallel.task.Handler;
 import xyz.sainjiaomao.parallel.task.Task;
 import xyz.sainjiaomao.parallel.task.configuration.Publisher;
-import xyz.sainjiaomao.parallel.task.Pipeline;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -34,15 +30,6 @@ public class TaskAcceptController {
   @Resource
   private RedisTemplate<String, Object> redisTemplate;
 
-  @Resource
-  private ReadHandler readHandler;
-
-  @Resource
-  private PrintHandler printHandler;
-
-  @Resource
-  private ClearHandler clearHandler;
-
 
   @GetMapping("parallel/{key}/{partition}")
   public void parallel(@PathVariable("key")String key, @PathVariable("partition") Long partition) {
@@ -52,15 +39,6 @@ public class TaskAcceptController {
     context.setKey(key);
     task.setBody(context);
     publisher.sendMessage(Constant.excelTask, task);
-  }
-
-  @PostConstruct
-  public void init() {
-    Pipeline pipeline = new Pipeline();
-    pipeline.registry(Constant.excelTask);
-    pipeline.addHandler(readHandler)
-        .addHandler(printHandler)
-        .addHandler(clearHandler);
   }
 
 }

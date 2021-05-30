@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 import xyz.sainjiaomao.parallel.task.Executor;
 import xyz.sainjiaomao.parallel.task.Task;
 
+import javax.annotation.Resource;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,9 +25,11 @@ import java.util.concurrent.Executors;
 public class Consumer implements MessageListener {
 
   private static final ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
-  //  @Resource
+  @Resource
+  private Executor executor;
+
   private StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-  //  @Resource
+
   private JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
 
   @Override
@@ -36,7 +39,7 @@ public class Consumer implements MessageListener {
     String topic = stringRedisSerializer.deserialize(channel);
     Task task = (Task) jdkSerializationRedisSerializer.deserialize(body);
     Assert.notNull(task, "");
-    pool.execute(() -> Executor.execute(topic, task));
+    pool.execute(() -> executor.execute(topic, task));
 
   }
 }
