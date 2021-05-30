@@ -24,7 +24,7 @@ public class Task implements Serializable {
   protected Object body;
 
   public Task(String key, Long partition, Long current) {
-    this.key = key;
+    this.key = key+":partition";
     this.partition = partition;
     this.current = current;
   }
