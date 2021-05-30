@@ -4,6 +4,7 @@ import cn.hutool.core.lang.UUID;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * <pre>
@@ -31,7 +32,7 @@ public class Task implements Serializable {
   }
 
   public boolean isCompleted() {
-    return partition <= current;
+    return Objects.equals(partition, current);
   }
 
   public <T> T getBody(){

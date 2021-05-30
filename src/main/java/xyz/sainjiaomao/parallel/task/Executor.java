@@ -4,6 +4,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -29,7 +30,7 @@ public class Executor {
   private Map<String, Handler> handlerMapping;
 
   @Resource
-  private RedisTemplate<String, String> redisTemplate;
+  private StringRedisTemplate stringRedisTemplate;
 
 
   public boolean execute(String topic, Task task) {
@@ -38,8 +39,8 @@ public class Executor {
     if(Objects.isNull(handler)){
       return false;
     }
-    while (!task.isCompleted()) {
-      Long current = redisTemplate.opsForValue().increment(task.getKey());
+    while (task.current <= task.partition) {
+      Long current = stringRedisTemplate.opsForValue().increment(task.getKey());
       Assert.notNull(current, "当前分片错误");
       if (current > task.getPartition()) {
         break;
@@ -48,12 +49,9 @@ public class Executor {
       try {
         handler.handler(task);
       }catch (Exception e){
-        //发生异常继续执行？
-        if(!handler.exception(task ,e)){
-          break;
-        }
+        handler.exception(task ,e);
       } finally {
-        redisTemplate.expire(task.key, Objects.equals(task.getCurrent(), task.getPartition())?5L:30L, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(task.key, Objects.equals(task.getCurrent(), task.getPartition())?5L:30L, TimeUnit.MINUTES);
       }
     }
     return true;

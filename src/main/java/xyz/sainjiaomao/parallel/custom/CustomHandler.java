@@ -34,16 +34,21 @@ public class CustomHandler implements Handler {
     if(task.getCurrent() % 2 == 0){
       throw new RuntimeException(task.getCurrent() + "");
     }
+    completed(task);
     return true;
   }
 
   @Override
-  public boolean exception(Task task, Exception e) {
+  public void exception(Task task, Exception e) {
     log.error("",e);
-    Context body = task.getBody();
+
+    completed(task);
+  }
+
+  private void completed(Task task) {
     if(task.isCompleted()) {
+      Context body = task.getBody();
       redisTemplate.delete(body.getKey());
     }
-    return false;
   }
 }
