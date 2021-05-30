@@ -19,4 +19,7 @@ public interface Handler {
   default boolean output(Task task) {
     return true;
   }
+
+  default void exception(Exception e){
+  }
 }

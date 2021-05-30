@@ -44,8 +44,8 @@ public class TaskAcceptController {
   private ClearHandler clearHandler;
 
 
-  @GetMapping("parallel/{key}/{partition}}")
-  public void parallel(@PathVariable("partition")String key, @PathVariable("partition") Long partition) {
+  @GetMapping("parallel/{key}/{partition}")
+  public void parallel(@PathVariable("key")String key, @PathVariable("partition") Long partition) {
     Task task = new Task("task", partition, 0L);
     redisTemplate.opsForValue().setIfAbsent(key, Arrays.asList(9,8,7,6,5,4,3,2,1,0));
     Context context = new Context();

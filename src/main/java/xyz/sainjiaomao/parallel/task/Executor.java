@@ -43,26 +43,34 @@ public class Executor implements ApplicationContextAware {
         break;
       }
       task.setCurrent(current);
-      try {
-        for (Handler handler : pipeline.getPipeline()) {
+      for (Handler handler : pipeline.getPipeline()) {
+        try {
           if (!handler.input(task)) {
             break;
           }
+        } catch (Exception e) {
+          handler.exception(e);
+          return false;
         }
-      } catch (Exception e) {
-        e.printStackTrace();
-        return false;
       }
     }
+    output(task, pipeline);
+
+    return true;
+  }
+
+  private static void output(Task task, Pipeline pipeline) {
     try {
       for (Handler handler : pipeline.getPipeline()) {
-        if (!handler.output(task)) {
+        try {
+          if (!handler.output(task)) {
+            break;
+          }
+        } catch (Exception e) {
+          handler.exception(e);
           break;
         }
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
     } finally {
       long timeout = 30L;
       if (task.isCompleted()) {
@@ -70,8 +78,6 @@ public class Executor implements ApplicationContextAware {
       }
       redisTemplate.expire(task.getKey(), timeout, TimeUnit.MINUTES);
     }
-
-    return true;
   }
 
 
