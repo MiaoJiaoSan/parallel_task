@@ -1,5 +1,6 @@
 package xyz.sainjiaomao.parallel.task;
 
+import cn.hutool.core.lang.UUID;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -24,7 +25,7 @@ public class Task implements Serializable {
   protected Object body;
 
   public Task(String key, Long partition) {
-    this.key = key+":partition";
+    this.key = key+":"+ UUID.fastUUID();
     this.partition = partition;
     this.current = 0L;
   }

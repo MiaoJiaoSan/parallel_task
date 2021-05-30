@@ -31,14 +31,20 @@ public class CustomHandler implements Handler {
     Context body = (Context) task.getBody();
     Object o = redisTemplate.opsForValue().get(body.getKey());
     List<Integer> list = ((List<Integer>) o);
-    System.out.println(list.get(task.getCurrent().intValue() - 1));
+    System.out.println(task.getCurrent());
+    if(task.getCurrent() % 2 == 0){
+      throw new RuntimeException(task.getCurrent() + "");
+    }
     return true;
   }
 
   @Override
-  public void exception(Task task, Exception e) {
+  public boolean exception(Task task, Exception e) {
     log.error("",e);
     Context body = (Context) task.getBody();
-    redisTemplate.delete(body.getKey());
+    if(task.isCompleted()) {
+      redisTemplate.delete(body.getKey());
+    }
+    return false;
   }
 }

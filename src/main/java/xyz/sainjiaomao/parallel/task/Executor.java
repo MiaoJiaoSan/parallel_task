@@ -48,7 +48,10 @@ public class Executor {
       try {
         handler.handler(task);
       }catch (Exception e){
-        handler.exception(task ,e);
+        //发生异常继续执行？
+        if(!handler.exception(task ,e)){
+          break;
+        }
       } finally {
         redisTemplate.expire(task.key, Objects.equals(task.getCurrent(), task.getPartition())?5L:30L, TimeUnit.MINUTES);
       }

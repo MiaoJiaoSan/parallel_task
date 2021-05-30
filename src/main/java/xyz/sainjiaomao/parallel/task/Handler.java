@@ -16,7 +16,7 @@ public interface Handler {
     return true;
   }
 
-  default void exception(Task task, Exception e){
-
+  default boolean exception(Task task, Exception e){
+    return false;
   }
 }
