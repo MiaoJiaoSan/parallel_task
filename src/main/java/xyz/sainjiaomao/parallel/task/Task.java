@@ -23,10 +23,10 @@ public class Task implements Serializable {
 
   protected Object body;
 
-  public Task(String key, Long partition, Long current) {
+  public Task(String key, Long partition) {
     this.key = key+":partition";
     this.partition = partition;
-    this.current = current;
+    this.current = 0L;
   }
 
   public boolean isCompleted() {
