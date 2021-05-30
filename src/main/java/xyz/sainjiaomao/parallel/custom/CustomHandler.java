@@ -28,9 +28,8 @@ public class CustomHandler implements Handler {
 
   @Override
   public boolean handler(Task task) {
-    Context body = (Context) task.getBody();
+    Context body = task.getBody();
     Object o = redisTemplate.opsForValue().get(body.getKey());
-    List<Integer> list = ((List<Integer>) o);
     System.out.println(task.getCurrent());
     if(task.getCurrent() % 2 == 0){
       throw new RuntimeException(task.getCurrent() + "");
@@ -41,7 +40,7 @@ public class CustomHandler implements Handler {
   @Override
   public boolean exception(Task task, Exception e) {
     log.error("",e);
-    Context body = (Context) task.getBody();
+    Context body = task.getBody();
     if(task.isCompleted()) {
       redisTemplate.delete(body.getKey());
     }

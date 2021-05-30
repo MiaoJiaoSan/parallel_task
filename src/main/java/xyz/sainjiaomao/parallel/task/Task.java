@@ -34,4 +34,7 @@ public class Task implements Serializable {
     return partition <= current;
   }
 
+  public <T> T getBody(){
+    return (T) body;
+  }
 }
