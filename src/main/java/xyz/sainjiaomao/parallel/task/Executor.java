@@ -51,7 +51,9 @@ public class Executor {
       }catch (Exception e){
         handler.exception(task ,e);
       } finally {
-        stringRedisTemplate.expire(task.key, Objects.equals(task.getCurrent(), task.getPartition())?5L:30L, TimeUnit.MINUTES);
+        if(task.isCompleted()) {
+          stringRedisTemplate.expire(task.key,  30L, TimeUnit.MINUTES);
+        }
       }
     }
     return true;

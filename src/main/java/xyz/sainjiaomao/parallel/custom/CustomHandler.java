@@ -8,7 +8,7 @@ import xyz.sainjiaomao.parallel.task.Handler;
 import xyz.sainjiaomao.parallel.task.Task;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
@@ -48,7 +48,7 @@ public class CustomHandler implements Handler {
   private void completed(Task task) {
     if(task.isCompleted()) {
       Context body = task.getBody();
-      redisTemplate.delete(body.getKey());
+      redisTemplate.expire(body.getKey(),30L, TimeUnit.MINUTES);
     }
   }
 }
