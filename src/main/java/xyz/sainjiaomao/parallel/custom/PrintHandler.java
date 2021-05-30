@@ -21,6 +21,11 @@ public class PrintHandler implements Handler {
   public boolean input(Task task) {
     Context context = (Context)task.getBody();
     List<Integer> list = context.getList();
+    try {
+      Thread.sleep(1000L);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
     System.out.println(list.get(task.getCurrent().intValue()-1));
     return false;
   }
