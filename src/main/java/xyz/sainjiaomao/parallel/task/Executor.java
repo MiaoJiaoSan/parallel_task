@@ -73,7 +73,7 @@ public class Executor implements ApplicationContextAware {
       }
     } finally {
       long timeout = 30L;
-      if (task.isCompleted()) {
+      if (Objects.equals(task.partition, task.current)) {
         timeout = 3L;
       }
       redisTemplate.expire(task.getKey(), timeout, TimeUnit.MINUTES);
