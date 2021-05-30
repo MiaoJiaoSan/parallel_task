@@ -20,6 +20,6 @@ public interface Handler {
     return true;
   }
 
-  default void exception(Exception e){
+  default void exception(Task task, Exception e){
   }
 }

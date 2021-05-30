@@ -49,7 +49,7 @@ public class Executor implements ApplicationContextAware {
             break;
           }
         } catch (Exception e) {
-          handler.exception(e);
+          handler.exception(task, e);
           return false;
         }
       }
@@ -67,7 +67,7 @@ public class Executor implements ApplicationContextAware {
             break;
           }
         } catch (Exception e) {
-          handler.exception(e);
+          handler.exception(task, e);
           break;
         }
       }
